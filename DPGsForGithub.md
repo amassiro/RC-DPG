@@ -43,8 +43,24 @@ Create PR:
 Then on the web for the PR
 
     https://github.com/cms-sw/cms-bot/pull/1532
+
+
     
     
+        
+      # dpgs
+      "xx":        ["trk-dpg"],
+      "xx":        ["ecal-dpg"],
+      "xx":        ["hcal-dpg"],
+      "xx":        ["muon-dpg"],
+      "xx":        ["dt-dpg"],
+      "xx":        ["csc-dpg"],
+      "xx":        ["rpc-dpg"],
+      "xx":        ["gem-dpg"],
+      "xx":        ["ctpps-dpg"],
+      "xx":        ["hgcal-dpg"],
+      "xx":        ["mtd-dpg"],
+        
     
     
     
