@@ -41,6 +41,18 @@ Get a whole bunch of events
     
     
     
+    
+    /Cosmics/Commissioning2021-CosmicTP-PromptReco-v1/RAW-RECO
+    https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=file+dataset%3D%2FCosmics%2FCommissioning2021-CosmicTP-PromptReco-v1%2FRAW-RECO+run%3D344063
+    
+    xrdcp root://xrootd.unl.edu///store/data/Commissioning2021/Cosmics/RAW-RECO/CosmicTP-PromptReco-v1/000/344/063/00000/10f95c97-4f96-4e33-93c7-2363d7a75b9e.root .
+    
+    
+    
+    
+    
+    
+    
 Extract file for the iSpy interface
 ====
 
