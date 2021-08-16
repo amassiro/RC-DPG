@@ -60,8 +60,10 @@ Then on the web for the PR
       "xx":        ["ctpps-dpg"],
       "xx":        ["hgcal-dpg"],
       "xx":        ["mtd-dpg"],
-        
-    
+       
+To tag groups in the PR:
+
+    @cms-sw/hcal-dpg-l2
     
     
     
