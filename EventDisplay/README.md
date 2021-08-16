@@ -49,8 +49,27 @@ Get a whole bunch of events
     
     
     
+    just RAW
+    https://cmsweb.cern.ch/das/request?instance=prod/global&input=file+dataset%3D%2FCosmics%2FCommissioning2021-v1%2FRAW+run%3D344063
     
     
+    xrdcp root://xrootd.unl.edu///store/data/Commissioning2021/Cosmics/RAW/v1/000/344/063/00000/048645d2-0b33-4882-b99f-56dce7d6f19f.root  .
+    
+    
+    ~~~
+    SP = Super Pointing  TP = Tracker Pointing
+    essentially it is a filter to select events through Tracker (TP) or even through the Pixel (SP) 
+    ~~~
+
+    https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=file+dataset%3D%2FCosmics%2FCommissioning2021-CosmicSP-PromptReco-v1%2FRAW-RECO+run%3D344063
+    
+    xrdcp root://xrootd.unl.edu///store/data/Commissioning2021/Cosmics/RAW-RECO/CosmicSP-PromptReco-v1/000/344/063/00000/3ef1ea68-1f7b-48a6-b59d-cb7dfc8f9d26.root  .  
+    
+    
+    
+    
+    
+
     
     
 Extract file for the iSpy interface
