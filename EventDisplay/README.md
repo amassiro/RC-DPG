@@ -153,3 +153,38 @@ Once you are happy save the 3D scene with Shift+E in case you want to ask for an
 
 
 
+
+
+
+Find the events
+====
+
+
+    /eos/cms/store/express/Commissioning2021/ExpressPhysics/FEVT/Express-v1/000/346/373/00000/
+    
+    
+    cd /afs/cern.ch/user/a/amassiro/work/RC/CMSSW_12_1_0_pre3/src
+    cmsenv
+    r99t ~/.root_fwlite.C  file.root
+    
+    
+    
+    #include "DataFormats/FWLite/interface/Event.h"
+    #include "PhysicsTools/FWLite/interface/Scanner.h"
+
+    fwlite::Event muonEvents(_file0)    
+    fwlite::Scanner<std::vector<reco::Muon> > muons(&muonEvents, "muons");
+
+    muons.scan("pt:eta:phi:track.numberOfValidHits","isTrackerMuon");
+
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
