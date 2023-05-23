@@ -44,15 +44,20 @@
   fChain->Add("newfile.root");
   
   TMultiGraph* mg = new TMultiGraph();
-  TGraph* grs[3564];
-
   TMultiGraph* mg_8b4e = new TMultiGraph();
   TMultiGraph* mg_train = new TMultiGraph();
-
-  std::vector<double> x;
-  std::vector<double> y_8b4e;
-  std::vector<double> y_train;
   
+  TGraph* grs[3564];
+  
+//   std::cout << " here 0 " << std::endl;
+  
+  
+  
+  std::vector<double> vx;
+  std::vector<double> vy_8b4e;
+  std::vector<double> vy_train;
+  
+//   std::cout << " here 1 " << std::endl;
   
 //   for (int iBX=0; iBX<100; iBX++) {
   for (int iBX=0; iBX<3564; iBX++) {
@@ -67,53 +72,66 @@
     grs[iBX]->SetLineWidth (1);                 
     grs[iBX]->SetLineColor (FI+iBX);              
     
-    std::cout << " here " << std::endl;
     
-//     if (iBX<100) mg->Add(grs[iBX]);
+    //     if (iBX<100) mg->Add(grs[iBX]);
     if (iBX>147 && iBX<312) mg->Add(grs[iBX]);
     
     if (iBX>147 && iBX<228) mg_8b4e->Add(grs[iBX]);
-    if (iBX>232 && iBX<312) mg_train->Add(grs[iBX]);
+    if (iBX>232 && iBX<313) mg_train->Add(grs[iBX]);
     
-    std::cout << " fChain->GetSelectedRows() = " << fChain->GetSelectedRows() << std::endl;
     
-    if (x.size() == 0) {
-      for (itime=0; itime<fChain->GetSelectedRows(); itime++) {
-        x.push_back(fChain->GetV1()[itime]);
+//     std::cout << " fChain->GetSelectedRows() = " << fChain->GetSelectedRows() << std::endl;
+    
+    if (vx.size() == 0) {
+//       std::cout << " grs[iBX]->GetN() = " << grs[iBX]->GetN() << std::endl;
+      for (int itime=0; itime<grs[iBX]->GetN(); itime++) {
+        vx.push_back(fChain->GetV2()[itime]);
       }       
     }
     
     
     //---- 8b4e
     if (iBX>147 && iBX<228) {
-      if (y_8b4e.size()==0) {
-        for (itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          y_8b4e.push_back(fChain->GetV1()[itime]);
+      if (vy_8b4e.size()==0) {
+        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
+          vy_8b4e.push_back(fChain->GetV1()[itime]);
         }
       }
       else {
-        for (itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          y_8b4e.at(itime) =  y_8b4e.at(itime) + (fChain->GetV1()[itime]);
+        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
+          vy_8b4e.at(itime) =  vy_8b4e.at(itime) + (fChain->GetV1()[itime]);
         }
       }
     }
       
-   
-   //---- train
-   if (iBX>147 && iBX<228) {
-     if (y_train.size()==0) {
-       for (itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-         y_train.push_back(fChain->GetV1()[itime]);
+    
+    //---- train
+    if (iBX>232 && iBX<313) {
+     if (vy_train.size()==0) {
+       for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
+         vy_train.push_back(fChain->GetV1()[itime]);
        }
      }
      else {
-       for (itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-         y_train.at(itime) =  y_train.at(itime) + (fChain->GetV1()[itime]);
+       for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
+         vy_train.at(itime) =  vy_train.at(itime) + (fChain->GetV1()[itime]);
        }
      }
-   }
+    }
+    
    
-   
+  }
+  
+  
+  
+  for (int itime=0; itime<vy_8b4e.size(); itime++) {    
+    // 7 trains of 8 bunches
+    vy_8b4e.at(itime) /= (7*8);
+  }
+  for (int itime=0; itime<vy_train.size(); itime++) {    
+    // 2 trains of 35 bunches
+    vy_train.at(itime) /= (35*2);
+//     std::cout << " vy_train.at(" << itime <<") = " << vy_train.at(itime) << " --> 8b4e = " << vy_8b4e.at(itime) << std::endl;
   }
   
   TCanvas* cc = new TCanvas ("cc", "all", 800, 600);
@@ -129,16 +147,38 @@
   mg_8b4e->GetXaxis()->SetTitle("time");
   mg_8b4e->GetYaxis()->SetTitle("Lumi Delivered /#mub");
   
-  TGraph* gr_8b4e = new TGraph (x.size(), x.data(), y_8b4e.data());
-  gr_8b4e->Draw();
-
+  TGraph* gr_8b4e = new TGraph (vx.size(), vx.data(), vy_8b4e.data());
+  gr_8b4e->SetMarkerSize  (2.0);               
+  gr_8b4e->SetMarkerStyle (22);              
+  gr_8b4e->SetMarkerColor (kRed);            
+  gr_8b4e->SetLineWidth (1);                 
+  gr_8b4e->SetLineColor (kRed);              
+  gr_8b4e->Draw("PL"); 
+  
+  TCanvas* cc_8b4e_ave = new TCanvas ("cc_8b4e_ave", "8b4e", 800, 600);
+  gr_8b4e->Draw("APL"); 
+  gr_8b4e->GetXaxis()->SetTitle("time");
+  gr_8b4e->GetYaxis()->SetTitle("Lumi Delivered /#mub");
+  
+  
   TCanvas* cc_train = new TCanvas ("cc_train", "train", 800, 600);
   mg_train->Draw("APL");
   mg_train->GetXaxis()->SetTitle("time");
   mg_train->GetYaxis()->SetTitle("Lumi Delivered /#mub");
     
-  TGraph* gr_train = new TGraph (x.size(), x.data(), y_train.data());
-  gr_train->Draw();
+  TGraph* gr_train = new TGraph (vx.size(), vx.data(), vy_train.data());
+  gr_train->SetMarkerSize  (2.0);               
+  gr_train->SetMarkerStyle (22);              
+  gr_train->SetMarkerColor (kBlue);            
+  gr_train->SetLineWidth (1);                 
+  gr_train->SetLineColor (kBlue);              
+  gr_train->Draw("PL"); 
+  
+  TCanvas* cc_train_ave = new TCanvas ("cc_train_ave", "train", 800, 600);
+  gr_train->Draw("APL"); 
+  gr_train->GetXaxis()->SetTitle("time");
+  gr_train->GetYaxis()->SetTitle("Lumi Delivered /#mub");
+  
   
   
   
