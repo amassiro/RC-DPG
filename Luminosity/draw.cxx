@@ -41,7 +41,27 @@
   
   
   TChain* fChain = new TChain ("newtree");
-  fChain->Add("newfile.root");
+//   fChain->Add("newfile.root");
+//   fChain->Add("fill_8817.root");
+//   
+//   int min_8b4e = 147;
+//   int max_8b4e = 228;
+//   
+//   int min_train = 232;
+//   int max_train = 313;
+  
+  
+  
+  fChain->Add("fill_8786.root");
+  
+  int min_8b4e = 108;
+  int max_8b4e = 191;
+  
+  int min_train = 195;
+  int max_train = 236;
+
+
+  
   
   TMultiGraph* mg = new TMultiGraph();
   TMultiGraph* mg_8b4e = new TMultiGraph();
@@ -83,10 +103,10 @@
     
     
     //     if (iBX<100) mg->Add(grs[iBX]);
-    if (iBX>147 && iBX<312) mg->Add(grs[iBX]);
+    if (iBX>min_8b4e && iBX<max_train) mg->Add(grs[iBX]);
     
-    if (iBX>147 && iBX<228) mg_8b4e->Add(grs[iBX]);
-    if (iBX>232 && iBX<313) mg_train->Add(grs[iBX]);
+    if (iBX>min_8b4e && iBX<max_8b4e)   mg_8b4e->Add(grs[iBX]);
+    if (iBX>min_train && iBX<max_train) mg_train->Add(grs[iBX]);
     
     
 //     std::cout << " fChain->GetSelectedRows() = " << fChain->GetSelectedRows() << std::endl;
@@ -257,7 +277,7 @@
   gr_train_down->Draw("L"); 
   
   
-  TLegend* legend = new TLegend(0.5,0.7,0.99,0.9);
+  TLegend* legend = new TLegend(0.65,0.70,0.90,0.90);
   legend->AddEntry(gr_8b4e,"8b4e with +/- 1 #sigma","PL");
   legend->AddEntry(gr_train,"train with +/- 1 #sigma","PL");
   legend->Draw();
