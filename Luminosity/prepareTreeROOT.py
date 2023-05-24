@@ -5,17 +5,24 @@
 
 import ROOT
 
-#filenameCVS = "fill_8736.csv"
-filenameCVS = "fill_8786.csv"
+
+def main(fill: int = 8736):
+    
+    filenameCVS = 'fill_' + fill + '.csv'
+    filenameROOT = 'fill_' + fill + '.root'
+    
+    df = ROOT.RDF.MakeCsvDataFrame(filenameCVS)
+    # https://root-forum.cern.ch/t/attributeerror-type-object-rdf-has-no-attribute-fromcsv/54899
+
+    df.Snapshot("newtree", filenameROOT)
 
 
-#ROOT.EnableImplicitMT()
-# df = ROOT.RDF.FromCSV(filenameCVS)
-df = ROOT.RDF.MakeCsvDataFrame(filenameCVS)
-# https://root-forum.cern.ch/t/attributeerror-type-object-rdf-has-no-attribute-fromcsv/54899
 
-#df2 = df.Filter("x > 0").Define("y", "x*x")
-#control_h = df2.Histo1D("y")
-#df.Snapshot("newtree", "newfile.root", ("fill", "run", "ls", "datetime", "time", "avgpu", "bcid"))
-df.Snapshot("newtree", "newfile.root")
+
+import sys
+print (sys.argv)
+
+main(fill = sys.argv[1])
+
+#main(fill=8786)
 

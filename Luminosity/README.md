@@ -12,6 +12,10 @@ From BRIL group
     /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTreeROOT.py
     
 
+    /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTree.py 8817
+    /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTreeROOT.py 8817
+    
+    
     r99t draw.cxx
     
 

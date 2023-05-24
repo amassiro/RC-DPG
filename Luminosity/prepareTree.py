@@ -51,8 +51,21 @@ def main(fill: int = 8736):
 
 
 
-main(fill=8786)
-fill_8786 = pandas.read_csv('fill_8786.csv')
+import sys
+print (sys.argv)
+
+#
+# ['prepareTree.py', '8817']
+#
+
+#main(fill=8786)
+
+main(fill = sys.argv[1])
+
+
+
+
+#fill_8786 = pandas.read_csv('fill_8786.csv')
 
 
 #main(fill=8736)
