@@ -18,6 +18,8 @@ From BRIL group
     /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTree.py 8786
     /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTreeROOT.py 8786
     
+    /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTree.py 8746
+    /cvmfs/cms-bril.cern.ch/brilconda3/bin/python3 prepareTreeROOT.py 8746
     
     
     r99t draw.cxx
