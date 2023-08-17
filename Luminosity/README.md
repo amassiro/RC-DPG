@@ -32,6 +32,9 @@ OMS:
 
 Draw Changes
 
+    
+    sh loop.sh
+    
     r99t drawChanges.cxx
     
     
