@@ -7,7 +7,9 @@ import pandas
 unit = '/ub'
 
 def query(fill: int) -> pandas.DataFrame:
-    cmd = ['.local/bin/brilcalc', 'lumi', '-f', str(fill), '-b', 'stable beams', '--output-style', 'csv', '--tssec', '--xing', '-u', unit]
+  
+    cmd = ['.local/bin/brilcalc', 'lumi', '-f', str(fill), '-b', 'stable beams', '--output-style', 'csv', '--tssec', '--xing', '-u', unit]  
+    #cmd = ['/afs/cern.ch/user/a/amassiro/.local/bin/brilcalc', 'lumi', '-f', str(fill), '-b', 'stable beams', '--output-style', 'csv', '--tssec', '--xing', '-u', unit]
     data = subprocess.run(cmd, capture_output=True, text=True)
     names = [col.strip() for col in data.stdout.splitlines()[1].lstrip('#').split(',')]
     data = pandas.read_csv(io.StringIO(data.stdout), names=names, comment='#')
