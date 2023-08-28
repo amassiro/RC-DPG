@@ -37,4 +37,7 @@ Draw Changes
     
     r99t drawChanges.cxx
     
+    ls Luminosity/ | tr "_" " " |  tr "." " " | awk '{print $2","}' | tr "\n" " "
+    
+    
     
