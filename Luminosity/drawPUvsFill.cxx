@@ -1,361 +1,121 @@
 {
   
-  gROOT->Reset();
-  gROOT->SetStyle("Plain");
-  gStyle->SetPalette(1);
-  gStyle->SetOptStat(111111);
-  gStyle->SetOptFit(1111);
   
-  #include "TROOT.h"
-  #include "TStyle.h"
-  #include "TColor.h"
-  const Int_t __NRGBs = 5;
-  //   const Int_t __NCont = 400;
-  const Int_t __NCont = 999;
-  //   const Int_t __NCont = 76;
-  Double_t __stops[__NRGBs] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
-  Double_t __red[__NRGBs]   = { 0.00, 0.00, 0.87, 1.00, 0.51 };
-  Double_t __green[__NRGBs] = { 0.00, 0.81, 1.00, 0.20, 0.00 };
-  Double_t __blue[__NRGBs]  = { 0.51, 1.00, 0.12, 0.00, 0.00 };
+  //   
+  //   read from OMS
+  //   data.csv
+  //   
   
-  //UInt_t Number = 5;
-  //Double_t Red[5]   = { 0.00, 0.09, 0.18, 0.09, 0.00 };
-  //Double_t Green[5] = { 0.01, 0.02, 0.39, 0.68, 0.97 };
-  //Double_t Blue[5]  = { 0.17, 0.39, 0.62, 0.79, 0.97 };
-  //Double_t Stops[5] = { 0.00, 0.34, 0.61, 0.84, 1.00 };
-  //UInt_t NColors = 999;
-  //TColor::CreateGradientColorTable(Number,Stops,Red,Green,Blue,NColors);
   
-  Int_t FI = TColor::CreateGradientColorTable(__NRGBs, __stops, __red, __green, __blue, __NCont);
-  gStyle->SetNumberContours(__NCont);
+  std::vector<int> v_fill {
+    7920, 7921, 7923, 7960, 7963, 7965, 7966, 7967, 7969, 7978, 8007, 8016, 8017, 8018, 8019, 8020, 8022, 8023, 8027, 8030, 8033, 8043, 8046, 8057, 8058, 8059, 8062, 8063, 8067, 8068, 8072, 8073, 8076, 8078, 8079, 8081, 8083, 8087, 8088, 8091, 8094, 8098, 8099, 8100, 8102, 8103, 8106, 8108, 8111, 8112, 8113, 8115, 8118, 8120, 8121, 8124, 8125, 8128, 8132, 8136, 8142, 8143, 8144, 8146, 8147, 8148, 8149, 8151, 8177, 8178, 8181, 8184, 8210, 8211, 8212, 8214, 8216, 8220, 8221, 8222, 8223, 8225, 8226, 8228, 8230, 8232, 8233, 8236, 8238, 8245, 8247, 8248, 8253, 8260, 8263, 8267, 8269, 8272, 8273, 8274, 8276, 8289, 8293, 8295, 8297, 8299, 8301, 8302, 8304, 8305, 8306, 8307, 8309, 8311, 8312, 8313, 8314, 8315, 8316, 8317, 8319, 8320, 8321, 8322, 8324, 8327, 8330, 8331, 8333, 8334, 8335, 8342, 8345, 8347, 8379, 8381, 8383, 8385, 8387, 8389, 8392, 8395, 8398, 8399, 8401, 8402, 8412, 8413, 8456, 8471, 8474, 8479, 8484, 8489, 8491, 8496, 8540, 8541, 8542, 8550, 8558, 8559, 8637, 8639, 8642, 8644, 8645, 8654, 8675, 8685, 8686, 8690, 8691, 8692, 8695, 8696, 8701, 8723, 8724, 8725, 8728, 8729, 8730, 8731, 8736, 8738, 8739, 8741, 8746, 8750, 8754, 8771, 8773, 8775, 8778, 8782, 8784, 8786, 8794, 8796, 8804, 8807, 8811, 8816, 8817, 8821, 8822, 8850, 8853, 8858, 8860, 8863, 8865, 8866, 8870, 8872, 8873, 8877, 8880, 8882, 8885, 8887, 8891, 8894, 8895, 8896, 8901, 8997, 8999, 9007, 9016, 9017, 9019, 9022, 9023, 9029, 9031, 9035, 9036, 9043, 9044, 9045, 9046, 9049, 9050, 9055, 9056, 9057, 9059, 9062, 9063, 9066, 9067, 9068, 9070, 9072, 9073
+  };
   
-  // TGaxis::SetMaxDigits(2);
-  // gStyle->SetNdivisions(100);
-  // gStyle->SetOptTitle(0);
-  //  gStyle->cd(); 
   
-  //   Int_t FI = TColor::CreateGradientColorTable(3,Length,Red,Green,Blue,50);
-  //   for (int i=0; i<50; i++) colors[i] = FI+i;
+  //   const char * DELIMS = "\t ,"; // Tab, space or comma.
+  const char * DELIMS = ","; // comma.
   
+  const int MAX_LINE_LENGTH = 1024;
+  
+  std::fstream fin("data.csv");
+  
+  // Prepare a C-string buffer to be used when reading lines.
+  char buffer[MAX_LINE_LENGTH] = {};        
+  
+  // Prepare map.
+  //   std::map< std::string, std::pair<int, TDatime> > map_fill_date;
+  std::map< int, std::pair<int, TDatime> > map_fill_date;
+  
+  //   fill_number,duration,start_stable_beam,delivered_lumi,recorded_lumi,energy
+  //   2023-07-16 22:50:23
+  //
+  // Read one line at a time.
+  while ( fin.getline(buffer, MAX_LINE_LENGTH) ) {
+    // Extract the three tokens:
+    const char * row = strtok( buffer, DELIMS );
+    const char * col = strtok( NULL,   DELIMS );
+    const char * val = strtok( NULL,   DELIMS );
+    
+    //
+    // 2023-07-16 22:50:23 --> (2023,07,16,22,50,23)
+    //    
+    
+    //     std::cout << " val = " << val << std::endl;
+    //     map_fill_date[std::string(row)] = std::pair<int, TDatime> ( std::atoi(col), TDatime(2023, 4, 21, 0, 0, 0) );
+    //     map_fill_date[std::string(row)] = std::pair<int, TDatime> ( std::atoi(col), TDatime(val) );
+    map_fill_date[std::atoi(row)] = std::pair<int, TDatime> ( std::atoi(col), TDatime(val) );
+  }      
+  
+  // Cleanup
+  fin.close();
   
   
   
   TChain* fChain = new TChain ("newtree");
-  //   fChain->Add("newfile.root");
   
-  
-  fChain->Add("fill_8817.root");
-  
-  int min_8b4e = 147;
-  int max_8b4e = 228;
-  
-  int min_train = 232;
-  int max_train = 313;
-  
-  
-  
-  //   fChain->Add("fill_8786.root");
-  //   
-  //   int min_8b4e = 108;
-  //   int max_8b4e = 191;
-  //   
-  //   int min_train = 195;
-  //   int max_train = 236;
-  
-  
-  
-  //   fChain->Add("fill_8746.root");
-  //   
-  //   int min_8b4e = 108;
-  //   int max_8b4e = 191;
-  //   
-  //   int min_train = 195;
-  //   int max_train = 236;
-  
-  
-  
-  TMultiGraph* mg = new TMultiGraph();
-  TMultiGraph* mg_8b4e = new TMultiGraph();
-  TMultiGraph* mg_train = new TMultiGraph();
-  
-  TGraph* grs[3564];
-  
-  //   std::cout << " here 0 " << std::endl;
-  
-  
-  
-  std::vector<double> vx;
-  std::vector<double> vy_8b4e;
-  std::vector<double> vy_8b4e_up_1sigma;
-  std::vector<double> vy_8b4e_down_1sigma;
-  std::vector<double> vy_train;
-  std::vector<double> vy_train_up_1sigma;
-  std::vector<double> vy_train_down_1sigma;
-  
-  std::vector< TH1F* > vy_map_8b4e;
-  std::vector< TH1F* > vy_map_train;
-  
-  
-  
-  //   std::cout << " here 1 " << std::endl;
-  
-  //   for (int iBX=0; iBX<100; iBX++) {
-  for (int iBX=0; iBX<3564; iBX++) {
-    TString toDraw = Form("bx_%d:time", iBX);
-    fChain->Draw(toDraw, "1", "GOFF");
-    
-    grs[iBX] = new TGraph (fChain->GetSelectedRows(), fChain->GetV2(), fChain->GetV1());
-    
-    grs[iBX]->SetMarkerSize  (0.3);               
-    grs[iBX]->SetMarkerStyle (21);              
-    grs[iBX]->SetMarkerColor (FI+iBX);            
-    grs[iBX]->SetLineWidth (1);                 
-    grs[iBX]->SetLineColor (FI+iBX);              
-    
-    
-    //     if (iBX<100) mg->Add(grs[iBX]);
-    if (iBX>min_8b4e && iBX<max_train) mg->Add(grs[iBX]);
-    
-    if (iBX>min_8b4e && iBX<max_8b4e)   mg_8b4e->Add(grs[iBX]);
-    if (iBX>min_train && iBX<max_train) mg_train->Add(grs[iBX]);
-    
-    
-    //     std::cout << " fChain->GetSelectedRows() = " << fChain->GetSelectedRows() << std::endl;
-    
-    if (vx.size() == 0) {
-      //       std::cout << " grs[iBX]->GetN() = " << grs[iBX]->GetN() << std::endl;
-      for (int itime=0; itime<grs[iBX]->GetN(); itime++) {
-        vx.push_back(fChain->GetV2()[itime]);
-      }       
-    }
-    
-    
-    //---- 8b4e
-    if (iBX>min_8b4e && iBX<max_8b4e) {
-      if (vy_8b4e.size()==0) {
-        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          vy_8b4e.push_back(fChain->GetV1()[itime]);
-          TString histoName = Form("histo_8b4e_%d", itime);
-          TH1F* histo = new TH1F (histoName.Data(), "", 600, 0, 300);
-          if (fChain->GetV1()[itime] > 10.0) histo->Fill(fChain->GetV1()[itime]);    //---- reasonable threshold ... 0.5, to remove empty bunches
-          vy_map_8b4e.push_back(histo);      
-        }
-      }
-      else {
-        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          vy_8b4e.at(itime) =  vy_8b4e.at(itime) + (fChain->GetV1()[itime]);
-          if (fChain->GetV1()[itime] > 10.0) vy_map_8b4e.at(itime)->Fill(fChain->GetV1()[itime]); 
-        }
-      }
-    }
-    
-    
-    //---- train
-    if (iBX>min_train && iBX<max_train) {
-      if (vy_train.size()==0) {
-        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          vy_train.push_back(fChain->GetV1()[itime]);      
-          TString histoName = Form("histo_train_%d", itime);
-          TH1F* histo = new TH1F (histoName.Data(), "", 600, 0, 300);
-          if (fChain->GetV1()[itime] > 10.0) histo->Fill(fChain->GetV1()[itime]);
-          vy_map_train.push_back(histo);      
-        }
-      }
-      else {
-        for (int itime=0; itime<fChain->GetSelectedRows(); itime++) {     
-          vy_train.at(itime) =  vy_train.at(itime) + (fChain->GetV1()[itime]);
-          if (fChain->GetV1()[itime] > 10.0) vy_map_train.at(itime)->Fill(fChain->GetV1()[itime]); 
-        }
-      }
-      
-    }
-    
-    
+  for (size_t i = 0; i < v_fill.size(); i++) {
+    TString namefile = Form ("fill_%d.root", v_fill[i] );
+    fChain->Add(namefile.Data());
   }
   
   
-  for (int itime=0; itime<vy_8b4e.size(); itime++) {    
-    // 7 trains of 8 bunches
-    //     vy_8b4e.at(itime) /= (7*8);
-    vy_8b4e.at(itime) = vy_map_8b4e.at(itime)->GetMean();
-    //     
-    vy_8b4e_up_1sigma.push_back(  vy_map_8b4e.at(itime)->GetMean() + vy_map_8b4e.at(itime)->GetRMS());
-    vy_8b4e_down_1sigma.push_back(vy_map_8b4e.at(itime)->GetMean() - vy_map_8b4e.at(itime)->GetRMS());
-    //     
-    //     std::cout << " vy_map_8b4e.at(" << itime << ")->GetMean() + vy_map_8b4e.at(" << itime << ")->GetRMS() = " << vy_map_8b4e.at(itime)->GetMean() + vy_map_8b4e.at(itime)->GetRMS() << std::endl;
-    //     std::cout << " vy_map_8b4e.at(" << itime << ")->GetMean() - vy_map_8b4e.at(" << itime << ")->GetRMS() = " << vy_map_8b4e.at(itime)->GetMean() - vy_map_8b4e.at(itime)->GetRMS() << std::endl;
+  
+  //   for (size_t i = 0; i < v_fill.size(); i++) {
+  //     TString toDraw = Form("avgpu");
+  //     TString toCut  = Form("fill==%d", v_fill[i]);
+  //     fChain->Draw(toDraw, "1", "GOFF");
+  //   }  
+  
+  
+  
+  TString toDraw = Form("avgpu:datetime");
+  fChain->Draw(toDraw, "1", "GOFF");
+  
+  
+  
+  // Create a TGraph object
+  TGraph* graph_avgpu = new TGraph(v_fill.size());
+  
+  
+  for (size_t i = 0; i < v_fill.size(); i++) {
+    graph_avgpu->SetPoint(i, (map_fill_date[v_fill[i]].second).Convert(), 1.23456);
   }
-  for (int itime=0; itime<vy_train.size(); itime++) {    
-    // 2 trains of 35 bunches
-    //     vy_train.at(itime) /= (35*2);
-    vy_train.at(itime) = vy_map_train.at(itime)->GetMean();
-    //     std::cout << " vy_train.at(" << itime <<") = " << vy_train.at(itime) << " --> 8b4e = " << vy_8b4e.at(itime) << std::endl;
-    vy_train_up_1sigma.push_back(  vy_map_train.at(itime)->GetMean() + vy_map_train.at(itime)->GetRMS());
-    vy_train_down_1sigma.push_back(vy_map_train.at(itime)->GetMean() - vy_map_train.at(itime)->GetRMS());
-  }
-  
-  TCanvas* cc = new TCanvas ("cc", "all", 800, 600);
-  mg->Draw("APL");
-  mg->GetXaxis()->SetTitle("time");
-  mg->GetYaxis()->SetTitle("Lumi Delivered /#mub");
-  
-  cc->SetGrid();
-  
-  
-  TCanvas* cc_8b4e = new TCanvas ("cc_8b4e", "8b4e", 800, 600);
-  
-  TGraph* gr_8b4e = new TGraph (vx.size(), vx.data(), vy_8b4e.data());
-  gr_8b4e->SetMarkerSize  (1.5);               
-  gr_8b4e->SetMarkerStyle (22);              
-  gr_8b4e->SetMarkerColor (kRed);            
-  gr_8b4e->SetLineWidth (1);                 
-  gr_8b4e->SetLineColor (kRed);              
-  //   gr_8b4e->Draw("PL"); 
-  
-  TGraph* gr_8b4e_up = new TGraph (vx.size(), vx.data(), vy_8b4e_up_1sigma.data());
-  gr_8b4e_up->SetMarkerSize  (0.2);               
-  gr_8b4e_up->SetMarkerStyle (22);              
-  gr_8b4e_up->SetMarkerColor (kRed);            
-  gr_8b4e_up->SetLineWidth (2);                 
-  gr_8b4e_up->SetLineColor (kRed);              
-  //   gr_8b4e_up->Draw("L"); 
-  
-  TGraph* gr_8b4e_down = new TGraph (vx.size(), vx.data(), vy_8b4e_down_1sigma.data());
-  gr_8b4e_down->SetMarkerSize  (0.2);               
-  gr_8b4e_down->SetMarkerStyle (22);              
-  gr_8b4e_down->SetMarkerColor (kRed);            
-  gr_8b4e_down->SetLineWidth (2);                 
-  gr_8b4e_down->SetLineColor (kRed);              
-  //   gr_8b4e_down->Draw("L"); 
-  
-  mg_8b4e->Add(gr_8b4e);
-  mg_8b4e->Add(gr_8b4e_up);
-  mg_8b4e->Add(gr_8b4e_down);
-  
-  mg_8b4e->Draw("APL");
-  mg_8b4e->GetXaxis()->SetTitle("time");
-  mg_8b4e->GetYaxis()->SetTitle("Lumi Delivered /#mub");
-  
-  cc_8b4e->SetGrid();
   
   
   
-  TCanvas* cc_8b4e_ave = new TCanvas ("cc_8b4e_ave", "8b4e", 800, 600);
-  gr_8b4e->Draw("APL"); 
-  gr_8b4e_up->Draw("L"); 
-  gr_8b4e_down->Draw("L"); 
-  gr_8b4e->GetXaxis()->SetTitle("time");
-  gr_8b4e->GetYaxis()->SetTitle("Lumi Delivered /#mub");
+  // Set graph_avgpu title and axis labels
+  graph_avgpu->SetTitle("Avg PU vs Time");
+  graph_avgpu->GetXaxis()->SetTitle("Time");
+  graph_avgpu->GetYaxis()->SetTitle("avg pu");
+  
+  // Create a canvas to display the graph_avgpu
+  TCanvas* canvas = new TCanvas("canvas", "Graph", 800, 600);
+  canvas->SetGrid();
+  
+  // Draw the graph_avgpu
+  graph_avgpu->Draw("APL");
+  graph_avgpu->SetMarkerSize(1);
+  graph_avgpu->SetMarkerStyle(20);
+  graph_avgpu->SetMarkerColor(kRed);
+  graph_avgpu->SetLineColor(kRed);
   
   
-  TCanvas* cc_train = new TCanvas ("cc_train", "train", 800, 600);
+  graph_avgpu->GetXaxis()->SetTimeDisplay(1);
+  //   graph_avgpu->GetXaxis()->SetTimeFormat("%Y-%m-%d");
+  graph_avgpu->GetXaxis()->SetTimeFormat("%d/%m");
   
-  TGraph* gr_train = new TGraph (vx.size(), vx.data(), vy_train.data());
-  gr_train->SetMarkerSize  (1.5);               
-  gr_train->SetMarkerStyle (22);              
-  gr_train->SetMarkerColor (kBlue);            
-  gr_train->SetLineWidth (1);                 
-  gr_train->SetLineColor (kBlue);              
-  //   gr_train->Draw("PL"); 
+  TGaxis::SetMaxDigits(4);  // Increase the maximum number of digits for better spacing
+  graph_avgpu->GetXaxis()->SetLabelOffset(0.015);  // Adjust the label offset if needed
+  graph_avgpu->GetXaxis()->LabelsOption("v");  // Vertically align the labels
   
-  TGraph* gr_train_up = new TGraph (vx.size(), vx.data(), vy_train_up_1sigma.data());
-  gr_train_up->SetMarkerSize  (0.2);               
-  gr_train_up->SetMarkerStyle (22);              
-  gr_train_up->SetMarkerColor (kBlue);            
-  gr_train_up->SetLineWidth (2);                 
-  gr_train_up->SetLineColor (kBlue);              
-  //   gr_train_up->Draw("L"); 
-  
-  TGraph* gr_train_down = new TGraph (vx.size(), vx.data(), vy_train_down_1sigma.data());
-  gr_train_down->SetMarkerSize  (0.2);               
-  gr_train_down->SetMarkerStyle (22);              
-  gr_train_down->SetMarkerColor (kBlue);            
-  gr_train_down->SetLineWidth (2);                 
-  gr_train_down->SetLineColor (kBlue);              
-  //   gr_train_down->Draw("L"); 
-  
-  
-  mg_train->Add(gr_train);
-  mg_train->Add(gr_train_up);
-  mg_train->Add(gr_train_down);
-  
-  mg_train->Draw("APL");
-  mg_train->GetXaxis()->SetTitle("time");
-  mg_train->GetYaxis()->SetTitle("Lumi Delivered /#mub");
-  
-  
-  cc_train->SetGrid();
+  //   graph_avgpu->GetXaxis()->SetTitleAngle(45);  // Rotate the title by 45 degrees
   
   
   
-  TCanvas* cc_train_ave = new TCanvas ("cc_train_ave", "train", 800, 600);
-  gr_train->Draw("APL"); 
-  gr_train->GetXaxis()->SetTitle("time");
-  gr_train->GetYaxis()->SetTitle("Lumi Delivered /#mub");
-  gr_train_up->Draw("L"); 
-  gr_train_down->Draw("L"); 
+  // Update the canvas
+  canvas->Update();
   
   
-  
-  TCanvas* cc_all_ave = new TCanvas ("cc_all_ave", "all", 800, 600);
-  TMultiGraph* mg_final = new TMultiGraph();
-  mg_final->Add(gr_8b4e);
-  mg_final->Add(gr_8b4e_up);
-  mg_final->Add(gr_8b4e_down);
-  mg_final->Add(gr_train);
-  mg_final->Add(gr_train_up);
-  mg_final->Add(gr_train_down);
-  
-  mg_final->Draw("APL");
-  
-  //   gr_8b4e->Draw("APL"); 
-  //   gr_8b4e_up->Draw("L"); 
-  //   gr_8b4e_down->Draw("L"); 
-  //   gr_train->Draw("PL"); 
-  //   gr_train_up->Draw("L"); 
-  //   gr_train_down->Draw("L"); 
-  
-  
-  TLegend* legend = new TLegend(0.65,0.70,0.90,0.90);
-  legend->AddEntry(gr_8b4e,"8b4e with +/- 1 #sigma","PL");
-  legend->AddEntry(gr_train,"train with +/- 1 #sigma","PL");
-  legend->Draw();
-  
-  
-  TCanvas* cc_histo = new TCanvas ("cc_histo", "", 1200, 600);
-  
-  int time_to_plot = 1000;
-  time_to_plot = vy_map_8b4e.size()/4.;
-  std::cout << " time_to_plot = " << time_to_plot << std::endl;
-  std::cout << "       ---> time " << vx.at(time_to_plot) << std::endl;
-  
-  cc_histo->Divide(2,1);
-  cc_histo->cd(1);
-  vy_map_8b4e.at(time_to_plot)->SetLineColor(kRed);
-  vy_map_8b4e.at(time_to_plot)->Draw();
-  cc_histo->cd(2);
-  vy_map_train.at(time_to_plot)->SetLineColor(kBlue);
-  vy_map_train.at(time_to_plot)->Draw();
-  
-  
-  
-  //  fChain->Draw ("bx_234:time");
-  
-  //  TH2F* histo = new TH2F("histo", "", 3564, 0, 3564, 100, 0.0, 2.0);
-  //  
-  //  int nEvt = fChain->GetEntries();
-  //  for (int iEvt=0; iEvt<nEvt; iEvt++) {
-  //    std::cout << " iEvt = " << iEvt << std::endl;
-  //    fChain->GetEntry(iEvt);
-  //    for (int iBX=0; iBX<3564; iBX++) {
-  //      TString CommandToROOTSize = Form("histo->Fill(%d, bx_%d);", iBX, iBX);
-  // //      std::cout << " CommandToROOTSize = " << CommandToROOTSize.Data() << std::endl;
-  //      gROOT->ProcessLine(CommandToROOTSize);
-  //    }
-  //  }
-  //   
-  //   histo->Draw();
-  //   
 }
 
 
