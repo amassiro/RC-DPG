@@ -32,12 +32,18 @@ OMS:
 
 Draw Changes
 
+    r99t drawChanges.cxx
+    
+
+Draw PU vs fill
+
     
     sh loop.sh
     
-    r99t drawChanges.cxx
+    r99t drawPUvsFill.cxx
     
     ls Luminosity/ | tr "_" " " |  tr "." " " | awk '{print $2","}' | tr "\n" " "
     
     
+        
     
