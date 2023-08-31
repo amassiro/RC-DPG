@@ -52,7 +52,7 @@ TCanvas *draw() {
   h_active_channel->LabelsDeflate("X");
   h_active_channel->LabelsOption("v");
 //   h_active_channel->Draw("hbar");
-  h_active_channel->GetYaxis()->SetTitle("Fraction (%)");
+  h_active_channel->GetYaxis()->SetTitle("Fraction active channels (%)");
   h_active_channel->SetFillColor(kGreen+2);
 //   h_active_channel->GetYaxis()->SetRangeUser(90, 110);
   h_active_channel->GetYaxis()->SetRangeUser(80, 102);
