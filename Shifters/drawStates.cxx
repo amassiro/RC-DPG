@@ -3,7 +3,7 @@
 #include <fstream>
 
 
-void draw(std::string nameFile) {
+void drawStates(std::string nameFile) {
   
   
   
@@ -17,27 +17,33 @@ void draw(std::string nameFile) {
     return 1;
   }
   
-  TH1F* histo = new TH1F ("histo", "", 40, 0, 40);
+  TH1F* histo = new TH1F ("histo", "", 44, 0, 44);
   
   int iter = 0;
   
   
   
-  char buffer[200];
-  int num;
-  
+  char buffer[2000];
+  float num;
+  std::string name;
   
   while(!indata.eof()) {
     std::cout << "num =";
-    indata.getline(&buffer[0],200);
- 
-    indata.getline(&buffer[0],200);
+     indata.getline(&buffer[0],2000);
     std::stringstream line( buffer );    
+    line >> name; 
+    line >> name; 
+
+    line >> num; 
+    line >> num; 
+    line >> num; 
+    line >> num; 
+    line >> num; 
+
+
     line >> num; 
     
-    indata.getline(&buffer[0],200);
-    
-    histo->Fill(num);
+    histo->Fill(iter, num);
     
     iter++;
     
@@ -46,23 +52,7 @@ void draw(std::string nameFile) {
     
   }
     
-    
-    
-//   while ( !indata.eof() ) { // keep reading until end-of-file
-//     indata >> num;
-//     indata >> num;
-// //     std::cout << "Number read is " << num << std::endl;
-//     histo->Fill(num);
-//     indata >> num;
-//     
-//     iter++;
-//     
-// //     if (! iter%10)
-//     std::cout << " iter = " << iter << std::endl;
-//     
-//   }
-    
-    
+
   indata.close();
   
 //   TH1F
@@ -72,7 +62,9 @@ void draw(std::string nameFile) {
   histo->SetFillColor(kRed);
   
   
-  histo->GetXaxis()->SetTitle("Number of shifts per person");
+  histo->GetXaxis()->SetTitle("index");
+  histo->GetYaxis()->SetTitle("done/expected");
+  
   
 }
 
