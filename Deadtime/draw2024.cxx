@@ -17,10 +17,6 @@
 
 
 //
-// Fill https://cmsoms.cern.ch/cms/fills/report?cms_fill=9883
-//    pu ~ 64 +/- 1
-//
-//
 
 
 void draw2024 () {
@@ -32,14 +28,16 @@ void draw2024 () {
   //   
   //   error = 0.1 - 0.2, reasonably, given the fluctuations
   //   
+  // Fill https://cmsoms.cern.ch/cms/fills/report?cms_fill=9883
+  //    pu ~ 64 +/- 0.5
+  //
   
   float deadtime_64[9] = { 5.78,   5.86,    6.31,    6.23,    6.61,    6.69,     7.11 };
   float trigger_64[9]  = {112.5,  113.5,   114.5,   115.5,   116.5,   117.5,    118.5 };
-  
-  int numPoints = 7;  
+  int numPoints_64 = 7;  
   
   TGraph* gr_deadtime_64 = new TGraph ();
-  for (int i=0; i<numPoints; i++) {
+  for (int i=0; i<numPoints_64; i++) {
     deadtime_64[i] = deadtime_64[i] - 0.98; // from bunch mask
     gr_deadtime_64->SetPoint(i, trigger_64[i],  deadtime_64[i] );
   }
@@ -50,22 +48,96 @@ void draw2024 () {
   gr_deadtime_64->SetMarkerSize(2);
   
   
+  //   
+  // Fill https://cmsoms.cern.ch/cms/fills/report?cms_fill=9879
+  //    pu ~ 64 +/- 0.5
+  //
+  
+  float deadtime_64_fill9879[9] = { 5.48,   5.81,    5.89,    6.17,    6.27,    6.39};
+  float trigger_64_fill9879[9]  = {112.5,  113.5,   114.5,   115.5,   116.5,   117.5};
+  int numPoints_64_fill9879 = 6;  
+  
+  TGraph* gr_deadtime_64_fill9879 = new TGraph ();
+  for (int i=0; i<numPoints_64_fill9879; i++) {
+    deadtime_64_fill9879[i] = deadtime_64_fill9879[i] - 0.98; // from bunch mask
+    gr_deadtime_64_fill9879->SetPoint(i, trigger_64_fill9879[i],  deadtime_64_fill9879[i] );
+  }
+  
+  gr_deadtime_64_fill9879->SetLineColor(kBlue);
+  gr_deadtime_64_fill9879->SetMarkerColor(kBlue);
+  gr_deadtime_64_fill9879->SetMarkerStyle(4);
+  gr_deadtime_64_fill9879->SetMarkerSize(2);
+  
+  
+  
+  //   
+  // Fill https://cmsoms.cern.ch/cms/fills/report?cms_fill=9877
+  //    pu ~ 64 +/- 0.5
+  //
+  
+  float deadtime_64_fill9877[9] = { 5.06,   5.25,    5.26,    5.38};
+  float trigger_64_fill9877[9]  = {110.5,  111.5,   112.5,   113.5};
+  int numPoints_64_fill9877 = 4;  
+  
+  TGraph* gr_deadtime_64_fill9877 = new TGraph ();
+  for (int i=0; i<numPoints_64_fill9877; i++) {
+    deadtime_64_fill9877[i] = deadtime_64_fill9877[i] - 0.98; // from bunch mask
+    gr_deadtime_64_fill9877->SetPoint(i, trigger_64_fill9877[i],  deadtime_64_fill9877[i] );
+  }
+  
+  gr_deadtime_64_fill9877->SetLineColor(kMagenta);
+  gr_deadtime_64_fill9877->SetMarkerColor(kMagenta);
+  gr_deadtime_64_fill9877->SetMarkerStyle(26);
+  gr_deadtime_64_fill9877->SetMarkerSize(2);
+  
+  
+  
+  
+  //   
+  // Fill https://cmsoms.cern.ch/cms/fills/report?cms_fill=9873
+  //    pu ~ 64 +/- 0.5
+  //
+  
+  float deadtime_64_fill9873[9] = { 5.05,   5.32,    5.45,    5.46,    5.58,    5.87};
+  float trigger_64_fill9873[9]  = {110.5,  111.5,   112.5,   113.5,   114.5,   115.5};
+  int numPoints_64_fill9873 = 6;  
+  
+  TGraph* gr_deadtime_64_fill9873 = new TGraph ();
+  for (int i=0; i<numPoints_64_fill9873; i++) {
+    deadtime_64_fill9873[i] = deadtime_64_fill9873[i] - 0.98; // from bunch mask
+    gr_deadtime_64_fill9873->SetPoint(i, trigger_64_fill9873[i],  deadtime_64_fill9873[i] );
+  }
+  
+  gr_deadtime_64_fill9873->SetLineColor(kMagenta+2);
+  gr_deadtime_64_fill9873->SetMarkerColor(kMagenta+2);
+  gr_deadtime_64_fill9873->SetMarkerStyle(24);
+  gr_deadtime_64_fill9873->SetMarkerSize(2);
+  
+  
+  
+  
   
   TMultiGraph* mgr = new TMultiGraph();
   mgr->Add (gr_deadtime_64           );
+  mgr->Add (gr_deadtime_64_fill9879  );
+  mgr->Add (gr_deadtime_64_fill9877  );
+  mgr->Add (gr_deadtime_64_fill9873  );
   
   
   cc->cd();
   mgr->Draw("APL");
   mgr->GetXaxis()->SetTitle("L1 rate [kHz]");
-  mgr->GetYaxis()->SetTitle("Deadtime [%]");
+  mgr->GetYaxis()->SetTitle("Deadtime beam active [%]");
   
   mgr->GetYaxis()->SetRangeUser(1,20);
   
   
   TLegend* legend = new TLegend(0.15, 0.60, 0.50, 0.80);
   legend->SetBorderSize(0);
-  legend->AddEntry(gr_deadtime_64,            "pu = 64#pm1,   2340 colliding at P5","p");
+  legend->AddEntry(gr_deadtime_64,            "pu = 64 #pm 0.5,   2340 colliding at P5, fill 9883","p");
+  legend->AddEntry(gr_deadtime_64_fill9879,   "pu = 64 #pm 0.5,   2340 colliding at P5, fill 9879","p");
+  legend->AddEntry(gr_deadtime_64_fill9877,   "pu = 64 #pm 0.5,   2269 colliding at P5, fill 9877","p");
+  legend->AddEntry(gr_deadtime_64_fill9873,   "pu = 64 #pm 0.5,   2340 colliding at P5, fill 9873","p");
   legend->Draw();
   
   
@@ -78,18 +150,22 @@ void draw2024 () {
   //   cc->GetFrame()->Draw();
   
   
-  TLine* l_3 = new TLine(trigger_64[0],3.0,trigger_64[numPoints_64-1],3.0);
-  l_3->Draw();
+  cc->SetGrid();
   
-  TLine* l_4 = new TLine(trigger_64[0],4.0,trigger_64[numPoints_64-1],4.0);
-  l_4->Draw();
   
-  TLine* l_5 = new TLine(trigger_64[0],5.0,trigger_64[numPoints_64-1],5.0);
-  l_5->Draw();
-  
-  TLine* l_6 = new TLine(trigger_64[0],6.0,trigger_64[numPoints_64-1],6.0);
-  l_6->Draw();
-  
+//   
+//   TLine* l_3 = new TLine(trigger_64[0],3.0,trigger_64[numPoints_64-1],3.0);
+//   l_3->Draw();
+//   
+//   TLine* l_4 = new TLine(trigger_64[0],4.0,trigger_64[numPoints_64-1],4.0);
+//   l_4->Draw();
+//   
+//   TLine* l_5 = new TLine(trigger_64[0],5.0,trigger_64[numPoints_64-1],5.0);
+//   l_5->Draw();
+//   
+//   TLine* l_6 = new TLine(trigger_64[0],6.0,trigger_64[numPoints_64-1],6.0);
+//   l_6->Draw();
+//   
   
   
   
