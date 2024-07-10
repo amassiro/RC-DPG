@@ -28,7 +28,6 @@ void drawStates(std::string nameFile) {
   std::string name;
   
   while(!indata.eof()) {
-    std::cout << "num =";
      indata.getline(&buffer[0],2000);
     std::stringstream line( buffer );    
     line >> name; 
@@ -48,7 +47,7 @@ void drawStates(std::string nameFile) {
     iter++;
     
     //     if (! iter%10)
-    std::cout << " iter = " << iter << std::endl;
+    std::cout << " name = " << name << "  iter = " << iter << " num = " << num << std::endl;
     
   }
     
@@ -56,14 +55,15 @@ void drawStates(std::string nameFile) {
   indata.close();
   
 //   TH1F
-  histo->Draw();
+  histo->Draw("histo");
   histo->SetLineWidth(2);
-  histo->SetLineColor(kRed);
-  histo->SetFillColor(kRed);
+  histo->SetLineColor(kTeal);
+  histo->SetFillColor(kTeal);
   
   
   histo->GetXaxis()->SetTitle("index");
   histo->GetYaxis()->SetTitle("done/expected");
+  histo->GetYaxis()->SetRangeUser(0, 1);
   
   
 }

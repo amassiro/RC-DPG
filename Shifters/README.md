@@ -29,3 +29,8 @@ Distribution
     r00t draw.cxx\(\"inputSL-3Jul2024.txt\"\)
     
     r00t drawStates.cxx\(\"proposal2-3Jul2024.txt\"\)
+    r00t drawStates.cxx\(\"proposal1-3Jul2024.txt\"\)
+    
+    
+    
+    
