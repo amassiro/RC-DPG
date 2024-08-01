@@ -281,5 +281,71 @@ void drawDeadtime () {
   cc_correlation_L1->SetGrid();
   
   
+  
+  
+  
+  TCanvas* cc_correlation_Total = new TCanvas ("cc_correlation_Total","Deadtime vs L1",800,600);
+  setTDRStyle();
+  
+  
+  TGraph* gr_dt_tot_L1_tot = new TGraph();
+  
+  i=0;
+  for (int ii=0; ii<v_deadtime_total.size(); ii++){
+    if (v_L1.at(ii) > 50 && v_L1.at(ii) < 130 && v_deadtime_total.at(ii) < 100*0.999) {
+      if (v_L1.at(ii) / (1. - v_deadtime_total.at(ii)/100.) < 130) {
+        gr_dt_tot_L1_tot->SetPoint(i, v_L1.at(ii), v_deadtime_total.at(ii) );
+        i++;
+      }
+    }
+  }
+  gr_dt_tot_L1_tot->SetMarkerColor(kRed);  
+  gr_dt_tot_L1_tot->SetMarkerStyle(20);
+  
+  gr_dt_tot_L1_tot->Draw ("AP");   
+  gr_dt_tot_L1_tot->GetXaxis()->SetTitle("L1 rate [kHz] ");
+  gr_dt_tot_L1_tot->GetYaxis()->SetTitle("Deadtime beam active [%]");
+  
+  
+  CMS_lumi( cc_correlation_Total, 4, 0 );
+  
+  cc_correlation_Total->SetGrid();
+  
+  
+  
+  
+  
+  
+  TCanvas* cc_correlation_Total_preDT = new TCanvas ("cc_correlation_Total_preDT","Deadtime vs L1",800,600);
+  setTDRStyle();
+  
+  
+  TGraph* gr_dt_tot_L1_tot_preDT = new TGraph();
+  
+  i=0;
+  for (int ii=0; ii<v_deadtime_total.size(); ii++){
+    if (v_L1.at(ii) > 50 && v_L1.at(ii) < 130 && v_deadtime_total.at(ii) < 100*0.999) {
+      if (v_L1.at(ii) / (1. - v_deadtime_total.at(ii)/100.) < 130) {
+        gr_dt_tot_L1_tot_preDT->SetPoint(i, v_L1.at(ii) / (1. - v_deadtime_total.at(ii)/100.), v_deadtime_total.at(ii) );
+        i++;
+      }
+    }
+  }
+  gr_dt_tot_L1_tot_preDT->SetMarkerColor(kRed);  
+  gr_dt_tot_L1_tot_preDT->SetMarkerStyle(20);
+  
+  gr_dt_tot_L1_tot_preDT->Draw ("AP");   
+  gr_dt_tot_L1_tot_preDT->GetXaxis()->SetTitle("L1 rate pre deadtime[kHz] ");
+  gr_dt_tot_L1_tot_preDT->GetYaxis()->SetTitle("Deadtime beam active [%]");
+  
+  
+  CMS_lumi( cc_correlation_Total_preDT, 4, 0 );
+  
+  cc_correlation_Total_preDT->SetGrid();
+  
+  
+  
+  
+  
 }
 
