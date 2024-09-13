@@ -19,8 +19,10 @@ void drawDeadtime () {
 
   
   
-  FILE *f = fopen("L1rate_Jul2024.csv", "r");
-//  FILE *f = fopen("L1rate_preDT_Jul2024.csv", "r");
+  FILE *f = fopen("L1rate_Sep2024_fill10107.csv", "r");
+//   FILE *f = fopen("L1rate_Sep2024.csv", "r");
+  //   FILE *f = fopen("L1rate_Jul2024.csv", "r");
+  //  FILE *f = fopen("L1rate_preDT_Jul2024.csv", "r");
   // Create the time graph
   TGraph* gr_L1 = new TGraph();
   char line[80];
@@ -39,7 +41,9 @@ void drawDeadtime () {
   
   
   //--------------------------------------------------------
-  FILE *f_dt_EBp = fopen("deadtime_EBp_Jul2024.csv", "r");
+//   FILE *f_dt_EBp = fopen("deadtime_EBp_Jul2024.csv", "r");
+  FILE *f_dt_EBp = fopen("deadtime_EBp_Sep2024_fill10107.csv", "r");
+//   FILE *f_dt_EBp = fopen("deadtime_EBp_Sep2024.csv", "r");
   // Create the time graph
   TGraph* gr_dt_EBp = new TGraph();
   i = 0;
@@ -60,7 +64,9 @@ void drawDeadtime () {
   
   
   //--------------------------------------------------------
-  FILE *f_dt_EBm = fopen("deadtime_EBm_Jul2024.csv", "r");
+//   FILE *f_dt_EBm = fopen("deadtime_EBm_Jul2024.csv", "r");
+  FILE *f_dt_EBm = fopen("deadtime_EBm_Sep2024_fill10107.csv", "r");
+//   FILE *f_dt_EBm = fopen("deadtime_EBm_Sep2024.csv", "r");
   // Create the time graph
   TGraph* gr_dt_EBm = new TGraph();
   i = 0;
@@ -83,7 +89,9 @@ void drawDeadtime () {
   
   
   //--------------------------------------------------------
-  FILE *f_dt_tot = fopen("deadtime_total_Jul2024.csv", "r");
+//   FILE *f_dt_tot = fopen("deadtime_total_Jul2024.csv", "r");
+  FILE *f_dt_tot = fopen("deadtime_total_Sep2024_fill10107.csv", "r");
+//   FILE *f_dt_tot = fopen("deadtime_total_Sep2024.csv", "r");
   // Create the time graph
   TGraph* gr_dt_tot = new TGraph();
   i = 0;
@@ -177,6 +185,7 @@ void drawDeadtime () {
   }
   gr_dt_EBp_L1->SetMarkerColor(kBlue);  
   gr_dt_EBp_L1->SetMarkerStyle(20);
+  gr_dt_EBp_L1->SetMarkerSize(0.5);
   
   //   gr_dt_EBp_L1->Draw ("AP");  
   //   gr_dt_EBp_L1->GetXaxis()->SetTitle("L1 rate pre deadtime [kHz] ");
@@ -196,6 +205,7 @@ void drawDeadtime () {
   }
   gr_dt_EBm_L1->SetMarkerColor(kBlue-3);  
   gr_dt_EBm_L1->SetMarkerStyle(21);
+  gr_dt_EBm_L1->SetMarkerSize(0.5);
   
   //   gr_dt_EBm_L1->Draw ("AP");  
   //   gr_dt_EBm_L1->GetXaxis()->SetTitle("L1 rate pre deadtime [kHz] ");
