@@ -2882,6 +2882,32 @@ void drawPUoptimization () {
   
   
   
+  TCanvas* cc_triggerL1preDeadtime_vs_pileup = new TCanvas ("cc_triggerL1preDeadtime_vs_pileup","cc_triggerL1preDeadtime_vs_pileup",800,600);
+  setTDRStyle();
+  
+  TGraph* gr_triggerL1preDeadtime_vs_pileup = new TGraph ();
+  for (int i=0; i<numPoints; i++) {
+    gr_triggerL1preDeadtime_vs_pileup->SetPoint(i, PU[i],  triggerL1preDeadtime[i]/1000.);
+  }
+  
+  gr_triggerL1preDeadtime_vs_pileup->SetLineColor(kBlue);
+  gr_triggerL1preDeadtime_vs_pileup->SetMarkerColor(kBlue);
+  gr_triggerL1preDeadtime_vs_pileup->SetMarkerStyle(8);
+  gr_triggerL1preDeadtime_vs_pileup->SetMarkerSize(1);
+  
+  cc_triggerL1preDeadtime_vs_pileup->cd();
+  
+  gr_triggerL1preDeadtime_vs_pileup->Draw("AP");
+  gr_triggerL1preDeadtime_vs_pileup->GetXaxis()->SetTitle("pileup");
+  gr_triggerL1preDeadtime_vs_pileup->GetYaxis()->SetTitle("trigger L1 pre-deadtime [kHz]");
+  
+  gr_triggerL1preDeadtime_vs_pileup->GetYaxis()->SetRangeUser(90,110);
+  
+  CMS_lumi( cc_triggerL1preDeadtime_vs_pileup, 4, 0 );
+  cc_triggerL1preDeadtime_vs_pileup->SetGrid();
+  
+  
+  
   TCanvas* cc_lumiRecorded_vs_pileup = new TCanvas ("cc_lumiRecorded_vs_pileup","cc_lumiRecorded_vs_pileup",800,600);
   setTDRStyle();
   
