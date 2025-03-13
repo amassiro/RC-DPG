@@ -1,6 +1,13 @@
 Event display
 ====
 
+For CRUZET 2025
+
+    /eos/cms/store/group/visualization/run389523/run389523_ls0008_streamEvDOutput2_dqmcluster.root
+    
+    https://fireworks.cern.ch/cmsShowWeb/revetor.pl
+
+
 For CRUZET 2021
 
 
